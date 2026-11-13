@@ -324,4 +324,44 @@
 
     window.__dtc = { encode: (spn, fmi, oc) => encodeDtc(spn, fmi, oc).map(hex2).join(' ') };
   }
+
+  /* ------------------------------------------------------------------
+   * Copy email address
+   * ------------------------------------------------------------------ */
+  $$('[data-copy]').forEach((btn) => {
+    const label = $('[data-copy-label]', btn);
+    const source = btn.parentElement ? $('[data-copy-source]', btn.parentElement) : null;
+    let timer = 0;
+
+    const flash = (text, done) => {
+      label.textContent = text;
+      btn.classList.toggle('is-done', done);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        label.textContent = 'Copy';
+        btn.classList.remove('is-done');
+      }, 2200);
+    };
+
+    // Without clipboard access, select the address so it can be copied by hand.
+    const selectSource = () => {
+      if (!source) return false;
+      const range = document.createRange();
+      range.selectNodeContents(source);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      return true;
+    };
+
+    btn.addEventListener('click', async () => {
+      try {
+        if (!navigator.clipboard || !window.isSecureContext) throw new Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        flash('Copied', true);
+      } catch (err) {
+        flash(selectSource() ? 'Selected' : 'Copy', false);
+      }
+    });
+  });
 })();

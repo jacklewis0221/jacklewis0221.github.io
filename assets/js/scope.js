@@ -220,8 +220,10 @@
 
   function measure() {
     const r = canvas.getBoundingClientRect();
-    W = Math.max(1, r.width);
-    H = Math.max(1, r.height);
+    // Hidden (print, collapsed layout): keep the last good geometry.
+    if (r.width < 40 || r.height < 40) return false;
+    W = r.width;
+    H = r.height;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
@@ -234,6 +236,7 @@
     x0 = plot.x + bitW * PRE_TRIGGER_BITS;
     grid = buildGrid();
     traces = encoded.map((e) => buildTrace(e.enc.bits));
+    return true;
   }
 
   function buildGrid() {
@@ -421,6 +424,7 @@
   }
 
   function render(index, progress, ghostIndex, ghostAlpha) {
+    if (!traces.length) return;
     ctx.clearRect(0, 0, W, H);
     if (grid) ctx.drawImage(grid, 0, 0, W, H);
     const upto = plot.x + plot.w * progress;
@@ -644,8 +648,7 @@
   }
 
   const ro = new ResizeObserver(() => {
-    measure();
-    redrawCurrent();
+    if (measure()) redrawCurrent();
   });
 
   function applyMotionPreference() {
