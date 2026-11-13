@@ -158,20 +158,21 @@
     return segs
       .filter((s) => s.g)
       .map((s) => {
-        let label = '';
+        // Long label first, then shorter fallbacks for narrow screens
+        let labels = [];
         let tone = 'neutral';
         if (s.g === 'ID') {
-          label = 'ID ' + hex(frame.id, 8);
+          labels = ['ID ' + hex(frame.id, 8), hex(frame.id, 8), 'ID'];
           tone = 'ch1';
-        } else if (s.g === 'CTL') label = 'DLC ' + frame.data.length;
-        else if (s.g === 'CRC') label = 'CRC ' + hex(enc.crc, 4);
-        else if (s.g === 'ACK') label = 'A';
-        else if (s.g === 'EOF') label = 'EOF';
+        } else if (s.g === 'CTL') labels = ['DLC ' + frame.data.length, String(frame.data.length)];
+        else if (s.g === 'CRC') labels = ['CRC ' + hex(enc.crc, 4), hex(enc.crc, 4), 'CRC'];
+        else if (s.g === 'ACK') labels = ['A'];
+        else if (s.g === 'EOF') labels = ['EOF'];
         else {
-          label = hex(frame.data[Number(s.g.slice(1))], 2);
+          labels = [hex(frame.data[Number(s.g.slice(1))], 2)];
           tone = 'ch2';
         }
-        return { ...s, label, tone };
+        return { ...s, labels, tone };
       });
   }
 
@@ -396,10 +397,11 @@
       ctx.lineWidth = 1;
       ctx.stroke();
       if (xb >= xbFull - 0.5) {
-        const tw = ctx.measureText(s.label).width;
-        if (tw + 8 <= xbFull - xa) {
+        const room = xbFull - xa - 6;
+        const label = s.labels.find((t) => ctx.measureText(t).width <= room);
+        if (label) {
           ctx.fillStyle = s.tone === 'ch1' ? C.ch1 : s.tone === 'ch2' ? C.ch2 : C.muted;
-          ctx.fillText(s.label, (xa + xbFull) / 2, decodeY + decodeH / 2 + 0.5);
+          ctx.fillText(label, (xa + xbFull) / 2, decodeY + decodeH / 2 + 0.5);
         }
       }
     }
@@ -459,18 +461,30 @@
     const tr = document.createElement('tr');
     tr.dataset.kind = f.kind;
     if (animate) tr.className = 'is-new';
+    const bytes = f.data.map((b) => hex(b, 2));
     const cells = [
       ['t-type', f.kind + (f.seq ? ' ' + f.seq : '')],
       ['t-id', hex(f.id, 8)],
-      ['t-data', f.data.map((b) => hex(b, 2)).join(' ')],
+      ['t-data', null],
       ['t-ascii', asciiFor(f)],
     ];
     for (const [cls, txt] of cells) {
       const td = document.createElement('td');
       td.className = cls;
-      td.textContent = txt;
+      if (txt === null) {
+        // Two halves so narrow panels can wrap the payload onto two lines
+        const lo = document.createElement('span');
+        const hi = document.createElement('span');
+        lo.textContent = bytes.slice(0, 4).join(' ');
+        hi.textContent = bytes.slice(4).join(' ');
+        td.append(lo, ' ', hi);
+      } else {
+        td.textContent = txt;
+      }
       tr.appendChild(td);
     }
+    const placeholder = rowsEl.querySelector('.is-placeholder');
+    if (placeholder) placeholder.remove();
     rowsEl.appendChild(tr);
   }
 
@@ -492,7 +506,13 @@
   }
 
   function resetPanel() {
-    rowsEl.textContent = '';
+    const tr = document.createElement('tr');
+    tr.className = 'is-placeholder';
+    const td = document.createElement('td');
+    td.colSpan = 4;
+    td.textContent = 'Listening on the bus…';
+    tr.appendChild(td);
+    rowsEl.replaceChildren(tr);
     reasmEl.textContent = 'Waiting for TP.CM…';
     reasmWrap.classList.remove('is-complete');
   }
@@ -556,7 +576,7 @@
   }
 
   function start() {
-    if (staticMode || suspended() || raf) return;
+    if (!ready || staticMode || suspended() || raf) return;
     raf = requestAnimationFrame(frameTick);
   }
 
@@ -638,7 +658,7 @@
       index = 0;
       phase = 'sweep';
       phaseStart = performance.now();
-      pausedAt = 0;
+      pausedAt = suspended() ? phaseStart : 0;
       start();
     }
   }

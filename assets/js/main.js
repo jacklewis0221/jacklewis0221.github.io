@@ -177,7 +177,7 @@
       selected = node;
 
       const ownKey = note.dataset.own;
-      kicker.textContent = ownKey === 'none' ? (key === 'targets' ? 'Service targets' : 'Who it serves') : 'Selected component';
+      kicker.textContent = ownKey === 'none' ? (key === 'targets' ? 'What gets serviced' : 'Who it serves') : 'Selected component';
       title.textContent = note.dataset.title;
       own.dataset.own = ownKey;
       own.textContent = '';

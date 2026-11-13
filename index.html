@@ -101,12 +101,12 @@
         <figure class="instrument" data-scope aria-labelledby="scope-caption">
           <div class="instrument-screen">
             <div class="scope-status" aria-hidden="true">
-              <span class="chip chip-ch1"><i></i>CH1 CAN_H</span>
-              <span class="chip chip-ch2"><i></i>CH2 CAN_L</span>
-              <span class="chip">500 mV/div</span>
+              <span class="chip chip-ch1"><i></i><span class="chip-pre">CH1 </span>CAN_H</span>
+              <span class="chip chip-ch2"><i></i><span class="chip-pre">CH2 </span>CAN_L</span>
+              <span class="chip chip-volt">500 mV/div</span>
               <span class="chip">50 µs/div</span>
-              <span class="chip chip-hide-sm">Trig SOF</span>
-              <span class="chip chip-right">CAN 250 kbit/s · 29-bit ID</span>
+              <span class="chip chip-trig">Trig SOF</span>
+              <span class="chip chip-rate">250 kbit/s</span>
             </div>
             <canvas class="scope-canvas" aria-hidden="true"></canvas>
             <button class="scope-toggle" type="button" aria-pressed="false" data-scope-toggle>
@@ -126,12 +126,19 @@
                 <thead>
                   <tr><th scope="col" class="t-type">Type</th><th scope="col" class="t-id">CAN ID</th><th scope="col" class="t-data">Data</th><th scope="col" class="t-ascii">ASCII</th></tr>
                 </thead>
-                <tbody data-frame-rows></tbody>
+                <tbody data-frame-rows>
+                  <tr data-kind="TP.CM"><td class="t-type">TP.CM</td><td class="t-id">1CECFFF9</td><td class="t-data"><span>20 22 00 05</span> <span>FF EB FE 00</span></td><td class="t-ascii">BAM · 65259</td></tr>
+                  <tr data-kind="TP.DT"><td class="t-type">TP.DT 1</td><td class="t-id">1CEBFFF9</td><td class="t-data"><span>01 4C 45 57</span> <span>49 53 2A 4A</span></td><td class="t-ascii">“LEWIS*J”</td></tr>
+                  <tr data-kind="TP.DT"><td class="t-type">TP.DT 2</td><td class="t-id">1CEBFFF9</td><td class="t-data"><span>02 41 43 4B</span> <span>2A 45 4D 42</span></td><td class="t-ascii">“ACK*EMB”</td></tr>
+                  <tr data-kind="TP.DT"><td class="t-type">TP.DT 3</td><td class="t-id">1CEBFFF9</td><td class="t-data"><span>03 45 44 44</span> <span>45 44 20 53</span></td><td class="t-ascii">“EDDED S”</td></tr>
+                  <tr data-kind="TP.DT"><td class="t-type">TP.DT 4</td><td class="t-id">1CEBFFF9</td><td class="t-data"><span>04 57 2A 53</span> <span>54 20 50 41</span></td><td class="t-ascii">“W*ST PA”</td></tr>
+                  <tr data-kind="TP.DT"><td class="t-type">TP.DT 5</td><td class="t-id">1CEBFFF9</td><td class="t-data"><span>05 55 4C 20</span> <span>4D 4E 2A FF</span></td><td class="t-ascii">“UL MN*”</td></tr>
+                </tbody>
               </table>
             </div>
-            <div class="reassembly" data-reassembly-wrap>
+            <div class="reassembly is-complete" data-reassembly-wrap>
               <p class="reassembly-label">Reassembled · PGN 65259 Component ID</p>
-              <p class="reassembly-value" data-reassembly>Waiting for TP.CM…</p>
+              <p class="reassembly-value" data-reassembly>LEWIS*JACK*EMBEDDED SW*ST PAUL MN*</p>
               <dl class="ci-fields" data-ci-fields>
                 <div><dt>Make</dt><dd>LEWIS</dd></div>
                 <div><dt>Model</dt><dd>JACK</dd></div>
@@ -766,7 +773,7 @@
             <li>
               <a href="https://github.com/jacklewis0221" target="_blank" rel="noopener noreferrer">
                 <span class="also-name">github.com/jacklewis0221</span>
-                <span class="also-desc">Coursework, algorithm practice, and microcontroller study repositories.</span>
+                <span class="also-desc">University coursework, algorithm practice, and forked microcontroller-course repositories I study from.</span>
                 <svg class="icon" aria-hidden="true"><use href="#i-arrow-up-right"/></svg>
               </a>
             </li>

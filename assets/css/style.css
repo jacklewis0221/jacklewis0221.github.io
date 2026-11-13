@@ -256,7 +256,7 @@ code {
   top: 0;
   z-index: 50;
   height: var(--header-h);
-  background: rgba(11, 12, 13, 0.82);
+  background: rgba(11, 12, 13, 0.88);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
   border-bottom: 1px solid transparent;
@@ -379,7 +379,7 @@ code {
 
 /* ---------- Hero ---------- */
 .hero {
-  padding-block: clamp(var(--space-8), 5vw, var(--space-16)) clamp(var(--space-16), 7vw, var(--space-24));
+  padding-block: clamp(var(--space-6), 3vw, var(--space-10)) clamp(var(--space-16), 7vw, var(--space-24));
 }
 .eyebrow {
   display: flex;
@@ -429,10 +429,10 @@ code {
   align-items: end;
 }
 .hero-lede {
-  font-size: var(--text-lg);
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem);
   line-height: 1.5;
   color: var(--color-text-muted);
-  max-width: 54ch;
+  max-width: 58ch;
 }
 .hero-actions {
   display: flex;
@@ -442,7 +442,7 @@ code {
 
 /* Instrument (scope + event table) */
 .instrument {
-  margin-top: clamp(var(--space-8), 5vw, var(--space-12));
+  margin-top: clamp(var(--space-6), 3vw, var(--space-10));
   display: grid;
   grid-template-columns: minmax(0, 1.72fr) minmax(0, 1fr);
   gap: var(--space-2);
@@ -453,6 +453,7 @@ code {
   box-shadow: var(--shadow-lg);
 }
 .instrument-screen {
+  container: screen / inline-size;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -546,6 +547,7 @@ code {
   display: none;
 }
 .instrument-panel {
+  container: panel / inline-size;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -613,10 +615,61 @@ code {
     background: transparent;
   }
 }
-.frame-table tbody:empty::after {
-  content: 'Listening on the bus…';
-  display: block;
-  padding: var(--space-3) var(--space-4);
+.frame-table td.t-data span {
+  white-space: nowrap;
+}
+
+/* Instrument adapts to its own width, not the viewport */
+@container screen (max-width: 760px) {
+  .chip-trig {
+    display: none;
+  }
+}
+@container screen (max-width: 560px) {
+  .chip-rate {
+    display: none;
+  }
+  .scope-status {
+    padding-right: calc(var(--space-3) + 44px);
+  }
+  .scope-toggle {
+    width: 40px;
+    justify-content: center;
+    padding: 0;
+  }
+  .scope-toggle [data-scope-toggle-label] {
+    display: none;
+  }
+}
+@container screen (max-width: 420px) {
+  .chip-pre,
+  .chip-volt {
+    display: none;
+  }
+}
+@container panel (max-width: 540px) {
+  .frame-table .t-id {
+    display: none;
+  }
+}
+@container panel (max-width: 420px) {
+  .frame-table th,
+  .frame-table td {
+    padding-inline: var(--space-3);
+  }
+  .frame-table td.t-data {
+    white-space: normal;
+  }
+  .frame-table td.t-data span {
+    display: block;
+  }
+  .panel-head {
+    padding-inline: var(--space-3);
+  }
+}
+
+.frame-table tr.is-placeholder td {
+  padding-block: var(--space-3);
   color: var(--color-text-muted);
 }
 .reassembly {
@@ -869,6 +922,10 @@ code {
   display: grid;
   gap: var(--space-5);
   padding-block: var(--space-5);
+}
+.role,
+.lesson {
+  max-width: none;
 }
 .role {
   display: grid;
@@ -1384,8 +1441,11 @@ code {
 }
 .arch-pipeline {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-3);
+}
+.arch-pipeline .arch-node:nth-child(4)::before {
+  display: none;
 }
 .arch-pipeline .arch-node + .arch-node::before {
   content: '';
@@ -2203,7 +2263,8 @@ html:not(.js) .arch-panel {
     display: grid;
     gap: 0;
     padding: var(--space-2) var(--gutter) var(--space-4);
-    background: rgba(11, 12, 13, 0.97);
+    background: var(--color-bg);
+    box-shadow: var(--shadow-md);
     border-bottom: 1px solid var(--color-border);
     opacity: 0;
     visibility: hidden;
@@ -2342,36 +2403,18 @@ html:not(.js) .arch-panel {
 }
 
 @media (max-width: 600px) {
-  .scope-status {
-    padding-right: calc(var(--space-3) + 110px);
+  .role-meta {
+    flex-direction: column;
+    gap: 2px;
   }
-  .chip-hide-sm,
-  .chip-right {
-    display: none;
-  }
-  .scope-toggle span {
-    display: none;
-  }
-  .scope-toggle {
-    width: 40px;
-    justify-content: center;
-    padding: 0;
-  }
-  .scope-status {
-    padding-right: calc(var(--space-3) + 44px);
+  .role-meta span + span::before {
+    content: none;
   }
   .instrument-screen {
     min-height: 250px;
   }
   .scope-canvas {
     min-height: 200px;
-  }
-  .frame-table th,
-  .frame-table td {
-    padding-inline: var(--space-3);
-  }
-  .frame-table .t-id {
-    display: none;
   }
   .ci-fields {
     grid-template-columns: repeat(2, auto);
