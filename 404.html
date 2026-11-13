@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Error frame · Page not found · Jack Lewis</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0c0d0e">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .err {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: var(--space-12) var(--gutter);
+    }
+    .err-card {
+      width: min(100%, 680px);
+    }
+    .err-code {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+    }
+    .err-title {
+      margin-top: var(--space-3);
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      font-stretch: 112%;
+      font-weight: 800;
+      line-height: 1.02;
+    }
+    .err-wave {
+      margin-top: var(--space-8);
+      padding: var(--space-5);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-screen);
+    }
+    .err-wave svg {
+      width: 100%;
+    }
+    .err-wave svg {
+      display: block;
+      height: clamp(84px, 18vw, 120px);
+    }
+    .err-legend {
+      display: grid;
+      grid-template-columns: 12.5% 30% 40% 17.5%;
+      margin-top: var(--space-3);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.35;
+      color: var(--color-text-muted);
+    }
+    .err-seg {
+      padding: var(--space-2) var(--space-2) 0;
+      border-top: 1px solid var(--color-border-strong);
+    }
+    .err-seg-dim {
+      border-top-style: dashed;
+    }
+    .err-body {
+      margin-top: var(--space-6);
+      color: var(--color-text-muted);
+    }
+    .err-actions {
+      margin-top: var(--space-8);
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" class="sr-only" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+  </svg>
+  <main class="err">
+    <div class="err-card">
+      <p class="err-code">404 · Error frame</p>
+      <h1 class="err-title">Nothing answered at this address.</h1>
+      <figure class="err-wave" aria-label="Diagram of a CAN error frame: six dominant bits of error flag followed by eight recessive bits of error delimiter.">
+        <svg viewBox="0 0 560 140" fill="none" aria-hidden="true" preserveAspectRatio="none">
+          <path d="M0 68H70V24H238V68H560" stroke="#f2cf4a" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+          <path d="M0 72H70V116H238V72H560" stroke="#6cd49a" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <div class="err-legend" aria-hidden="true">
+          <span></span>
+          <span class="err-seg">Error flag · 6 dominant</span>
+          <span class="err-seg err-seg-dim">Delimiter · 8 recessive</span>
+          <span></span>
+        </div>
+      </figure>
+      <p class="err-body">On a CAN bus, an error frame is how a node tells everyone that something went wrong. This page doesn’t exist, or it moved. The rest of the bus is still running.</p>
+      <div class="err-actions">
+        <a class="btn btn-primary" href="/"><svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg>Back to jacklewis0221.github.io</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
